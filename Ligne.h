@@ -24,7 +24,7 @@
 //
 //------------------------------------------------------------------------
 
-class Ligne :
+class Ligne
 {
 //----------------------------------------------------------------- PUBLIC
 
@@ -35,7 +35,7 @@ public:
 
 //-------------------------------------------- Constructeurs - destructeur
 
-    Ligne ( );
+    Ligne (string ip, string logName, string userName, string date, string cible, int httpCode, int size, string referer, string client);
     // Mode d'emploi :
     // Construit la ligne a partir des infos extraites du fichier log
 
@@ -50,15 +50,15 @@ protected:
 
 //----------------------------------------------------- Attributs protégés
 
-String ip;
-String logName;
-String userName;
-String date;
-String cible;
-int httpCode;
-int size;
-String referer;
-Sring client;
+    string ip;
+    string logName;
+    string userName;
+    string date;
+    string cible;
+    int httpCode;
+    int size;
+    string referer;
+    string client;
 
 };
 
