@@ -13,6 +13,7 @@
 //--------------------------------------------------- Interfaces utilisées
 
 #include <string>
+using namespace std;
 
 //------------------------------------------------------------- Constantes
 
@@ -29,6 +30,7 @@ class Ligne
 //----------------------------------------------------------------- PUBLIC
 
 public:
+    string ip;
 //----------------------------------------------------- Méthodes publiques
 
 //------------------------------------------------- Surcharge d'opérateurs
@@ -50,7 +52,6 @@ protected:
 
 //----------------------------------------------------- Attributs protégés
 
-    string ip;
     string logName;
     string userName;
     string date;

@@ -28,7 +28,8 @@ using namespace std;
 //----------------------------------------------------- Méthodes publiques
 
 //-------------------------------------------- Constructeurs - destructeur
-Ligne::Ligne (string ip, string logName, string userName, string date, string cible, int httpCode, int size, string referer, string client)
+Ligne::Ligne (string myip, string mylogName, string myuserName, string mydate, string mycible, int myhttpCode, int mysize, string myreferer, string myclient) : 
+ip(myip), logName(mylogName), userName(myuserName), date(mydate), cible(mycible), httpCode(myhttpCode), size(mysize), referer(myreferer), client(myclient)
 {
 #ifdef MAP
     cout << "Appel au constructeur de <Ligne>" << endl;
