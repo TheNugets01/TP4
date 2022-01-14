@@ -12,7 +12,7 @@
 
 //--------------------------------------------------- Interfaces utilisées
 
-#include <string.h>
+#include <string>
 
 //------------------------------------------------------------- Constantes
 
@@ -35,7 +35,7 @@ public:
 
 //-------------------------------------------- Constructeurs - destructeur
 
-    Ligne (string ip, string logName, string userName, string date, string cible, int httpCode, int size, string referer, string client);
+    Ligne (string myip, string mylogName, string myuserName, string mydate, string mycible, int myhttpCode, int mysize, string myreferer, string myclient);
     // Mode d'emploi :
     // Construit la ligne a partir des infos extraites du fichier log
 
