@@ -1,18 +1,20 @@
 /*************************************************************************
-                           Ligne  -  implemente une ligne de fichier log
+                           LireLigne  -  Permet de lire une ligne du fichier log
                              -------------------
     début                : 14/01/2022
     copyright            : (C) 2022 par Hugo Blaess & Octave Duvivier
     e-mail               : hugo.blaess@insa-lyon.fr & octave.duvivier@insa-lyon.fr
 *************************************************************************/
 
-//---------- Interface de la classe Ligne (fichier Ligne.h) ----------------
-#if ! defined ( LIGNE_H )
-#define LIGNE_H
+//---------- Interface de la classe LireLigne (fichier LireLigne.h) ----------------
+#if ! defined ( LIRELIGNE_H )
+#define LIRELIGNE_H
 
 //--------------------------------------------------- Interfaces utilisées
 
 #include <string>
+#include <fstream>
+#include "Ligne.h"
 using namespace std;
 
 //------------------------------------------------------------- Constantes
@@ -20,49 +22,42 @@ using namespace std;
 //------------------------------------------------------------------ Types
 
 //------------------------------------------------------------------------
-// Rôle de la classe <Ligne>
-// La classe ligne contient tous les attributs d'une ligne du fichier log
+// Rôle de la classe <LireLigne>
+// La classe LireLigne va lire les informations d'une ligne du fichier log et créer une Ligne qui possède toutes les informations
 //
 //------------------------------------------------------------------------
 
-class Ligne
+class LireLigne : public ifstream
 {
 //----------------------------------------------------------------- PUBLIC
 
 public:
-    string ip;
+
 //----------------------------------------------------- Méthodes publiques
+
+    Ligne Lecture();
 
 //------------------------------------------------- Surcharge d'opérateurs
 
 //-------------------------------------------- Constructeurs - destructeur
 
-    Ligne (string myip, string mylogName, string myuserName, string mydate, string mycible, int myhttpCode, int mysize, string myreferer, string myclient);
-    // Mode d'emploi :
-    // Construit la ligne a partir des infos extraites du fichier log
+    LireLigne(string nomFichier, ios_base::openmode mode);
+    // Mode d'emploi
+    // Construit l'objet LireLigne à partir du constructeur de ifstream
 
-    virtual ~Ligne ( );
+    ~LireLigne();
     // Mode d'emploi :
-    // Detruit la ligne
-
+    // Détruit l'objet LireLigne
 //------------------------------------------------------------------ PRIVE
 
 protected:
 //----------------------------------------------------- Méthodes protégées
 
 //----------------------------------------------------- Attributs protégés
-    string logName;
-    string userName;
-    string date;
-    string cible;
-    int httpCode;
-    int size;
-    string referer;
-    string client;
 
 };
 
-//-------------------------------- Autres définitions dépendantes de <Ligne>
+//-------------------------------- Autres définitions dépendantes de <LireLigne>
 
-#endif // LIGNE_H
+#endif // LIRELIGNE_H
 
