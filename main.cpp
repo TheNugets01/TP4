@@ -1,10 +1,6 @@
-#include <stdio.h>
-#include <iostream>
-#include "FluxLog.h"
-using namespace std;
+#include "TraiterLog.h"
 
 int main()
 {
-    FluxLog src ("test.txt", ios_base::in);
-    src.LireLigne().Afficher();
+    Analog();
 }
