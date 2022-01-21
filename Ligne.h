@@ -30,8 +30,9 @@ class Ligne
 //----------------------------------------------------------------- PUBLIC
 
 public:
-    string ip;
 //----------------------------------------------------- Méthodes publiques
+
+    void Afficher();
 
 //------------------------------------------------- Surcharge d'opérateurs
 
@@ -51,6 +52,7 @@ protected:
 //----------------------------------------------------- Méthodes protégées
 
 //----------------------------------------------------- Attributs protégés
+    string ip;
     string logName;
     string userName;
     string date;

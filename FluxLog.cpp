@@ -1,12 +1,12 @@
 /*************************************************************************
-                           LireLigne  -  Permet de lire une ligne du fichier log
+                           FluxLog  -  Permet de specialiser le flux ifstream pour nous permettre de lire une ligne
                              -------------------
     début                : 14/01/2022
     copyright            : (C) 2022 par Hugo Blaess & Octave Duvivier
     e-mail               : hugo.blaess@insa-lyon.fr & octave.duvivier@insa-lyon.fr
 *************************************************************************/
 
-// -- Réalisation de la classe <LireLigne> (fichier LireLigne.cpp) --
+// -- Réalisation de la classe <FluxLog> (fichier FluxLog.cpp) --
 
 //---------------------------------------------------------------- INCLUDE
 
@@ -17,7 +17,7 @@ using namespace std;
 
 //------------------------------------------------------ Include personnel
 
-#include "LireLigne.h"
+#include "FluxLog.h"
 
 //------------------------------------------------------------- Constantes
 
@@ -27,32 +27,54 @@ using namespace std;
 
 //----------------------------------------------------- Méthodes publiques
 
-Ligne LireLigne::Lecture()
+Ligne FluxLog::LireLigne()
 {
     string ip;
+    string logName;
+    string userName;
+    string date;
+    string cible;
+    string sHttpCode;
+    string sSize;
+    string referer;
+    string client;
+
     std::getline(*this,ip,' ');
-    cout << ip << endl;
-    Ligne ligneCourante(ip, "-", "-", "[08/Sep/2012:11:16:02 +0200]", "GET /temps/4IF16.html HTTP/1.1", 200, 12106, 
-    "http://intranet-if.insa-lyon.fr/temps/4IF15.html", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:14.0) Gecko/20100101 Firefox/14.0.1");
+    std::getline(*this,logName,' ');
+    std::getline(*this,userName,' ');
+    ignore(1);
+    std::getline(*this,date,']');
+    ignore(2);
+    std::getline(*this,cible,'"');
+    ignore(1);
+    std::getline(*this,sHttpCode,' ');
+    std::getline(*this,sSize,' ');
+    ignore(1);
+    std::getline(*this,referer,'"');
+    ignore(2);
+    std::getline(*this,client,'"');
+    int httpCode = stoi(sHttpCode);
+    int size = stoi(sSize);
+    Ligne ligneCourante(ip,logName,userName,date,cible,httpCode,size,referer,client);
     return ligneCourante;
 }
 
 //-------------------------------------------- Constructeurs - destructeur
-LireLigne::LireLigne (string nomFichier, ios_base::openmode mode)
+FluxLog::FluxLog (string nomFichier, ios_base::openmode mode) : ifstream(nomFichier,mode)
 {
-    ifstream(nomFichier,mode);
+
 #ifdef MAP
-    cout << "Appel au constructeur de <LireLigne>" << endl;
+    cout << "Appel au constructeur de <FluxLog>" << endl;
 #endif
 
 } //----- Fin de Ligne
 
 
-LireLigne::~LireLigne ( )
+FluxLog::~FluxLog ( )
 {
 
 #ifdef MAP
-    cout << "Appel au destructeur de <LireLigne>" << endl;
+    cout << "Appel au destructeur de <FluxLog>" << endl;
 #endif
 } //----- Fin de ~Ligne
 

@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include <iostream>
-#include "LireLigne.h"
+#include "FluxLog.h"
 using namespace std;
 
 int main()
 {
-    LireLigne src ("test.log", ios_base::in);
-    cout << src.Lecture().ip << endl;
+    FluxLog src ("test.txt", ios_base::in);
+    src.LireLigne().Afficher();
 }

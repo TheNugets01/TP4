@@ -23,9 +23,20 @@ using namespace std;
 
 //----------------------------------------------------------------- PUBLIC
 
-//--------------------------------------------------- Fonctions Ordinaires
-
 //----------------------------------------------------- Méthodes publiques
+
+    void Ligne::Afficher()
+    {
+        cout << "IP : " << ip << endl;
+        cout << "logName : " << logName << endl;
+        cout << "userName : " << userName << endl;
+        cout << "date : " << date << endl;
+        cout << "cible : " << cible << endl;
+        cout << "httpCode : " << httpCode << endl;
+        cout << "size : " << size << endl;
+        cout << "referer : " << referer << endl;
+        cout << "client : " << client << endl;
+    }
 
 //-------------------------------------------- Constructeurs - destructeur
 Ligne::Ligne (string myip, string mylogName, string myuserName, string mydate, string mycible, int myhttpCode, int mysize, string myreferer, string myclient) : 

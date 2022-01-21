@@ -1,14 +1,14 @@
 /*************************************************************************
-                           LireLigne  -  Permet de lire une ligne du fichier log
+                           FluxLog  -  Permet de specialiser le flux ifstream pour nous permettre de lire une ligne
                              -------------------
     début                : 14/01/2022
     copyright            : (C) 2022 par Hugo Blaess & Octave Duvivier
     e-mail               : hugo.blaess@insa-lyon.fr & octave.duvivier@insa-lyon.fr
 *************************************************************************/
 
-//---------- Interface de la classe LireLigne (fichier LireLigne.h) ----------------
-#if ! defined ( LIRELIGNE_H )
-#define LIRELIGNE_H
+//---------- Interface de la classe FluxLog (fichier FluxLog.h) ----------------
+#if ! defined ( FLUXLOG_H )
+#define FLUXLOG_H
 
 //--------------------------------------------------- Interfaces utilisées
 
@@ -22,12 +22,12 @@ using namespace std;
 //------------------------------------------------------------------ Types
 
 //------------------------------------------------------------------------
-// Rôle de la classe <LireLigne>
-// La classe LireLigne va lire les informations d'une ligne du fichier log et créer une Ligne qui possède toutes les informations
+// Rôle de la classe <FluxLog>
+// La classe FluxLog permet de specialiser le flux ifstream pour nous permettre de lire une ligne grace a une methode de la classe
 //
 //------------------------------------------------------------------------
 
-class LireLigne : public ifstream
+class FluxLog : public ifstream
 {
 //----------------------------------------------------------------- PUBLIC
 
@@ -35,19 +35,19 @@ public:
 
 //----------------------------------------------------- Méthodes publiques
 
-    Ligne Lecture();
+    Ligne LireLigne();
 
 //------------------------------------------------- Surcharge d'opérateurs
 
 //-------------------------------------------- Constructeurs - destructeur
 
-    LireLigne(string nomFichier, ios_base::openmode mode);
+    FluxLog(string nomFichier, ios_base::openmode mode);
     // Mode d'emploi
-    // Construit l'objet LireLigne à partir du constructeur de ifstream
+    // Construit l'objet FluxLog à partir du constructeur de ifstream
 
-    ~LireLigne();
+    ~FluxLog();
     // Mode d'emploi :
-    // Détruit l'objet LireLigne
+    // Détruit l'objet FluxLog
 //------------------------------------------------------------------ PRIVE
 
 protected:
@@ -57,7 +57,7 @@ protected:
 
 };
 
-//-------------------------------- Autres définitions dépendantes de <LireLigne>
+//-------------------------------- Autres définitions dépendantes de <FluxLog>
 
-#endif // LIRELIGNE_H
+#endif // FLUXLOG_H
 
