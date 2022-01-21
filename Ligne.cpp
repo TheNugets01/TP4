@@ -39,6 +39,14 @@ using namespace std;
     }
 
 //-------------------------------------------- Constructeurs - destructeur
+Ligne::Ligne(const Ligne & uneLigne) :
+ip(uneLigne.ip), logName(uneLigne.logName), userName(uneLigne.userName), date(uneLigne.date), cible(uneLigne.cible), httpCode(uneLigne.httpCode), size(uneLigne.size), referer(uneLigne.referer), client(uneLigne.client)
+{
+#ifdef MAP
+    cout << "Appel au constructeur de copie <Ligne>" << endl;
+#endif
+}
+
 Ligne::Ligne (string myip, string mylogName, string myuserName, string mydate, string mycible, int myhttpCode, int mysize, string myreferer, string myclient) : 
 ip(myip), logName(mylogName), userName(myuserName), date(mydate), cible(mycible), httpCode(myhttpCode), size(mysize), referer(myreferer), client(myclient)
 {

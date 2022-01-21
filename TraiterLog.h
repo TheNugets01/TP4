@@ -13,6 +13,7 @@
 //--------------------------------------------------- Interfaces utilisées
 
 #include <string>
+#include <unordered_map>
 using namespace std;
 
 //------------------------------------------------------------- Constantes
@@ -25,32 +26,8 @@ using namespace std;
 //
 //------------------------------------------------------------------------
 
-
-
-class TraiterLog
-{
-//----------------------------------------------------------------- PUBLIC
-
-public:
-
-//----------------------------------------------------- Méthodes publiques
-    
-//------------------------------------------------- Surcharge d'opérateurs
-
-//-------------------------------------------- Constructeurs - destructeur
-
-//------------------------------------------------------------------ PRIVE
-
-protected:
-//----------------------------------------------------- Méthodes protégées
-
-//----------------------------------------------------- Attributs protégés
-
-};
-
-//-------------------------------- Autres définitions dépendantes de <TraiterLog>
-
 void Analog();
+void AfficherUM(unordered_map<string,int> & um);
 
 #endif // TRAITERLOG_H
 

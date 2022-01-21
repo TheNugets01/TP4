@@ -30,6 +30,8 @@ class Ligne
 //----------------------------------------------------------------- PUBLIC
 
 public:
+    int httpCode;
+    string cible;
 //----------------------------------------------------- Méthodes publiques
 
     void Afficher();
@@ -37,6 +39,8 @@ public:
 //------------------------------------------------- Surcharge d'opérateurs
 
 //-------------------------------------------- Constructeurs - destructeur
+
+    Ligne (const Ligne & autre);
 
     Ligne (string myip, string mylogName, string myuserName, string mydate, string mycible, int myhttpCode, int mysize, string myreferer, string myclient);
     // Mode d'emploi :
@@ -56,8 +60,6 @@ protected:
     string logName;
     string userName;
     string date;
-    string cible;
-    int httpCode;
     int size;
     string referer;
     string client;
