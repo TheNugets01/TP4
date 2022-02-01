@@ -20,12 +20,12 @@ using namespace std;
 
 //------------------------------------------------------------------ Types
 struct Arguments {
-    bool g;
-    bool e;
-    bool t;
-    string nomDot;
-    string nomLog;
-    int heure;
+    bool g = false;
+    bool e = false;
+    bool t = false;
+    string nomDot = "";
+    string nomLog = "";
+    int heure = 0;
 };
 //------------------------------------------------------------------------
 // Rôle de la classe <TraiterLog>

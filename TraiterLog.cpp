@@ -11,7 +11,8 @@
 //---------------------------------------------------------------- INCLUDE
 
 //-------------------------------------------------------- Include système
-
+#include <string>
+#include <unordered_map>
 #include <stdio.h>
 #include <iostream>
 #include <vector>
@@ -32,12 +33,76 @@ typedef pair<string, int> site;
 
 //--------------------------------------------------- Fonctions Ordinaires
 
-Arguments TraiterArgs(int nbArg, char *listArg [])
+Arguments TraiterArgs(int nbArg, char *Arg[])
 {
-    Arguments mesArgs; //= {false,false,false,"","",0};
-    string monNomLog = "salut";//string(listArg[0]);
-    //mesArgs.nomLog = "salut";//monNomLog;
-    cout << monNomLog << endl;
+    Arguments mesArgs; //= {'\0',"","",-1};
+    
+    string listArg = "";
+    for(int i=0 ; Arg[i] != NULL ; ++i)
+    {
+            listArg += Arg[i]; // ./analog-gfichier.dot\0
+    }
+
+    for(int i=0 ; listArg[i] != '\0' ; ++i)
+    // verification de listArg ------- INUTILE
+    {
+        cout << listArg[i]; // ./analog-gfichier.dot\0
+    }
+    cout << endl;
+
+    listArg.erase(0 , 8);
+
+    if( listArg.empty() )
+    {
+        cerr << "Le fichier .log à analyser n'est pas défini" << endl;
+    }
+    else if ( listArg[0] == '-' ) //traitement des modes
+    {
+        int str_it = 0;
+        while( listArg[ str_it ] == '-' && str_it < 100)
+        {
+            ++str_it;
+            if( listArg[ str_it ] == 'g') 
+            {
+                mesArgs.g = true;
+                cout << "g : " << mesArgs.g << endl;
+
+                string verifType = "";
+                
+                ++str_it;
+                
+                do
+                {
+                    verifType.clear();
+                    for(int i = 0 ; i < 4 && str_it + i <=  listArg.length() ; ++i)
+                    {
+                        verifType += listArg[ str_it + i];
+                    }
+
+                    mesArgs.nomDot += listArg[ str_it ];
+
+                    ++str_it;
+
+                }while( verifType != ".dot");
+
+                cout << mesArgs.nomDot + verifType << endl;
+            }
+            else if( listArg[ str_it ] == 'e')
+            {
+                mesArgs.e = true;
+                cout << "e : " << mesArgs.e << endl;
+            }
+            else if( listArg[ str_it ] == 't')
+            {
+                mesArgs.t = true;
+                cout << "t : " << mesArgs.t << endl;
+            }
+
+            ++str_it;
+        }
+    }
+    
+
     return mesArgs;
 }
 
