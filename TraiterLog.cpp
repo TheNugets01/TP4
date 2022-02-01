@@ -14,6 +14,8 @@
 
 #include <stdio.h>
 #include <iostream>
+#include <vector>
+#include <algorithm>
 using namespace std;
 
 //------------------------------------------------------ Include personnel
@@ -24,17 +26,53 @@ using namespace std;
 //------------------------------------------------------------- Constantes
 
 typedef unordered_map<string,int>::iterator umit;
+typedef pair<string, int> site;
 
 //----------------------------------------------------------------- PUBLIC
 
 //--------------------------------------------------- Fonctions Ordinaires
 
-void Analog()
+Arguments TraiterArgs(int nbArg, char *listArg [])
+{
+    Arguments mesArgs; //= {false,false,false,"","",0};
+    string monNomLog = "salut";//string(listArg[0]);
+    //mesArgs.nomLog = "salut";//monNomLog;
+    cout << monNomLog << endl;
+    return mesArgs;
+}
+
+bool cmp(const site & l, const site & r)
+{
+    if (l.second != r.second) {
+        return l.second > r.second;
+    }
+    return l.first > r.first;
+}
+
+void Top10(unordered_map<string,int> & um)
+{
+    vector<site> top10;
+    copy(um.begin(),um.end(),back_inserter<vector<site>>(top10));
+    sort(top10.begin(), top10.end(),cmp);
+
+    int size = top10.size();
+    if(size > 10)
+    {
+        size = 10;
+    }
+    for(int i = 0 ; i < size ; ++i)
+    {
+        cout << top10[i].second << " : " << top10[i].first  << endl;
+    }
+}
+
+void Analog(Arguments mesArgs)
 {
     unordered_map<string,int> cptCible;
     FluxLog src ("test.txt", ios_base::in);
+    //FluxLog src ("anonyme.log", ios_base::in);
     int i = 0;
-    while(i<4)
+    while(src.peek()!=EOF)
     {
         umit it;
         Ligne ligneCourante(src.LireLigne());
@@ -55,7 +93,8 @@ void Analog()
         }
         i++;
     }
-    AfficherUM(cptCible);
+    //AfficherUM(cptCible);
+    Top10(cptCible);
 }
 
 void AfficherUM(unordered_map<string,int> & um)
@@ -65,6 +104,7 @@ void AfficherUM(unordered_map<string,int> & um)
         cout << '<' << it->first << ',' << it->second << '>' << endl;
     }
 }
+
 //----------------------------------------------------- Méthodes publiques
 
 //-------------------------------------------- Constructeurs - destructeur

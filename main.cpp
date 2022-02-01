@@ -1,6 +1,6 @@
 #include "TraiterLog.h"
 
-int main()
+int main(int nbArg, char *listArg [])
 {
-    Analog();
+    Analog(TraiterArgs(nbArg, listArg));
 }

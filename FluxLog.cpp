@@ -44,8 +44,10 @@ Ligne FluxLog::LireLigne()
     std::getline(*this,userName,' ');
     ignore(1);
     std::getline(*this,date,']');
-    ignore(2);
-    std::getline(*this,cible,'"');
+    ignore(1);
+    ignore(TAILLEBUFFER,' ');
+    std::getline(*this,cible,' ');
+    ignore(TAILLEBUFFER,'"');
     ignore(1);
     std::getline(*this,sHttpCode,' ');
     std::getline(*this,sSize,' ');
@@ -53,8 +55,17 @@ Ligne FluxLog::LireLigne()
     std::getline(*this,referer,'"');
     ignore(2);
     std::getline(*this,client,'"');
+    ignore(TAILLEBUFFER,'\n');
     int httpCode = stoi(sHttpCode);
-    int size = stoi(sSize);
+    int size;
+    if(sSize != "-")
+    {
+        size = stoi(sSize);
+    }
+    else
+    {  
+        size = 0;
+    }
     Ligne ligneCourante(ip,logName,userName,date,cible,httpCode,size,referer,client);
     return ligneCourante;
 }

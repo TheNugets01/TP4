@@ -19,14 +19,22 @@ using namespace std;
 //------------------------------------------------------------- Constantes
 
 //------------------------------------------------------------------ Types
-
+struct Arguments {
+    bool g;
+    bool e;
+    bool t;
+    string nomDot;
+    string nomLog;
+    int heure;
+};
 //------------------------------------------------------------------------
 // Rôle de la classe <TraiterLog>
 // La classe TraiterLog contient toutes les fonctions et methodes de traitement des logs
 //
 //------------------------------------------------------------------------
 
-void Analog();
+Arguments TraiterArgs(int nbArg, char *listArg []);
+void Analog(Arguments mesArgs);
 void AfficherUM(unordered_map<string,int> & um);
 
 #endif // TRAITERLOG_H
