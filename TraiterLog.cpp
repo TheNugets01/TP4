@@ -40,29 +40,24 @@ Arguments TraiterArgs(int nbArg, char *Arg[])
     string listArg = "";
     for(int i=0 ; Arg[i] != NULL ; ++i)
     {
-            listArg += Arg[i]; // ./analog-gfichier.dot\0
+            listArg += Arg[i]; // = ./analog-gfichier.dot\0
     }
 
-    for(int i=0 ; listArg[i] != '\0' ; ++i)
-    // verification de listArg ------- INUTILE
-    {
-        cout << listArg[i]; // ./analog-gfichier.dot\0
-    }
-    cout << endl;
-
-    listArg.erase(0 , 8);
+    listArg.erase(0 , 8); // enleve le ./analog des attributs
 
     if( listArg.empty() )
     {
         cerr << "Le fichier .log à analyser n'est pas défini" << endl;
     }
-    else if ( listArg[0] == '-' ) //traitement des modes
+    else
     {
         int str_it = 0;
-        while( listArg[ str_it ] == '-' && str_it < 100)
+        //if ( listArg[0] == '-' ) //traitement des modes
+        //{
+        while( listArg[ str_it ] == '-' && str_it < 1000)
         {
             ++str_it;
-            if( listArg[ str_it ] == 'g') 
+            if( listArg[ str_it ] == 'g') // traitement du mode g
             {
                 mesArgs.g = true;
                 cout << "g : " << mesArgs.g << endl;
@@ -85,21 +80,45 @@ Arguments TraiterArgs(int nbArg, char *Arg[])
 
                 }while( verifType != ".dot");
 
-                cout << mesArgs.nomDot + verifType << endl;
+                str_it+=3; // permet de se placer au niveau du prochain '-' si il existe
+                
+                cout << mesArgs.nomDot + "dot" << endl;
             }
-            else if( listArg[ str_it ] == 'e')
+            else if( listArg[ str_it ] == 'e') // traitement du mode e
             {
                 mesArgs.e = true;
                 cout << "e : " << mesArgs.e << endl;
+                ++str_it;
             }
-            else if( listArg[ str_it ] == 't')
+            else if( listArg[ str_it ] == 't')// traitement du mode t
             {
                 mesArgs.t = true;
-                cout << "t : " << mesArgs.t << endl;
+                cout << "t : " << mesArgs.t;
+                mesArgs.heure = (int(listArg[ ++str_it ]) - 48)*10 + int(listArg[ ++str_it ]) - 48;
+                cout << " heure : " << mesArgs.heure << endl;
+
+                ++str_it;
+
+            }
+        }
+        //}
+
+        string verifType = "";
+        do
+        {
+            verifType.clear();
+            for(int i = 0 ; i < 4 && str_it + i <=  listArg.length() ; ++i)
+            {
+                verifType += listArg[ str_it + i];
             }
 
+            mesArgs.nomLog += listArg[ str_it ];
+
             ++str_it;
-        }
+
+        }while( verifType != ".log" && str_it < 1000);
+
+        cout << mesArgs.nomLog + "log" << endl;
     }
     
 
