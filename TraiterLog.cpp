@@ -36,92 +36,65 @@ typedef list<site>::iterator lit;
 
 //--------------------------------------------------- Fonctions Ordinaires
 
-Arguments TraiterArgs(int nbArg, char *Arg[])
+Arguments TraiterArgs(int nbArg, char *listArg[])
 {
-    Arguments mesArgs; //= {'\0',"","",-1};
-    
-    string listArg = "";
-    for(int i=0 ; Arg[i] != NULL ; ++i)
+    Arguments mesArgs; //= {false,false,false,"","",-1};
+
+    if( nbArg == 1 )
+    // Traitement de l'oublie du nom du fichier log à traiter
     {
-            listArg += Arg[i]; // = ./analog-gfichier.dot\0
+        cerr << "l'appel  à la fonction n'est pas bien formé" << endl;
+        return mesArgs;
     }
 
-    listArg.erase(0 , 8); // enleve le ./analog des attributs
-
-    if( listArg.empty() )
+    mesArgs.nomLog = listArg[nbArg - 1];
+    if ( mesArgs.nomLog.length() <= 4 || mesArgs.nomLog.compare( mesArgs.nomLog.length()- 4 ,4,".log") != 0 )
     {
-        cerr << "Le fichier .log à analyser n'est pas défini" << endl;
+        cerr << "Erreur ! Le fichier '.log' est mal définie ou mal positionné!" << endl;
+        cerr << "----Pensez à bien spécifiez le type '.log' et d'écrire le nom de fichier à la fin" << endl;
+        mesArgs.g = false;
+        mesArgs.e = false;
+        mesArgs.t = false;
+        mesArgs.nomDot = "";
+        mesArgs.nomLog = "";
+        mesArgs.heure = -1;
     }
-    else
+
+    for(int i = 1 ; i < nbArg - 1 ; ++i) // traitement des modes si il y en a
     {
-        int str_it = 0;
-        while( listArg[ str_it ] == '-' && str_it < 1000)
+        //cout << listArg[i] << endl;
+
+        if( listArg[i][0] == '-' )
         {
-            ++str_it;
-            if( listArg[ str_it ] == 'g') // traitement du mode g
+            if( listArg[i][1] == 'g' && i+2 < nbArg ) // traitement du mode g
             {
                 mesArgs.g = true;
-                cout << "g : " << mesArgs.g << endl;
+                mesArgs.nomDot = listArg[++i];
 
-                string verifType = "";
-                
-                ++str_it;
-                
-                do
+                if ( mesArgs.nomDot.compare( mesArgs.nomDot.length()- 4 ,4,".dot") != 0 )
                 {
-                    verifType.clear();
-                    for(int i = 0 ; i < 4 && str_it + i <=  listArg.length() ; ++i)
-                    {
-                        verifType += listArg[ str_it + i];
-                    }
-
-                    mesArgs.nomDot += listArg[ str_it ];
-
-                    ++str_it;
-
-                }while( verifType != ".dot");
-
-                str_it+=3; // permet de se placer au niveau du prochain '-' si il existe
-                
-                mesArgs.nomDot += "dot";
+                    cerr << "Erreur ! Le fichier '.dot' est mal définie !" << endl;
+                    cerr << " ---------Pensez à bien spécifiez le type '.dot' " << endl;
+                    mesArgs.g = false;
+                    mesArgs.nomDot = "";
+                }
             }
-            else if( listArg[ str_it ] == 'e') // traitement du mode e
+            else if ( listArg[i][1] == 'e' && i+1 < nbArg ) // traitement du mode e
             {
                 mesArgs.e = true;
-                cout << "e : " << mesArgs.e << endl;
-                ++str_it;
             }
-            else if( listArg[ str_it ] == 't')// traitement du mode t
+            else if ( listArg[i][1] == 't' && i+2 < nbArg ) // traitement du mode t
             {
                 mesArgs.t = true;
-                cout << "t : " << mesArgs.t;
-                mesArgs.heure = (int(listArg[ ++str_it ]) - 48)*10 + int(listArg[ ++str_it ]) - 48;
-                cout << " heure : " << mesArgs.heure << endl;
-
-                ++str_it;
-
+                mesArgs.heure = stoi(listArg[++i]);
+            }
+            else
+            {
+                cerr << "Erreur ! Un des modes n'est pas connu ou est mal défini !" << endl;
+                return mesArgs;
             }
         }
-        //}
-
-        string verifType = "";
-        do
-        {
-            verifType.clear();
-            for(int i = 0 ; i < 4 && str_it + i <=  listArg.length() ; ++i)
-            {
-                verifType += listArg[ str_it + i];
-            }
-
-            mesArgs.nomLog += listArg[ str_it ];
-
-            ++str_it;
-
-        }while( verifType != ".log" && str_it < 1000);
-
-        mesArgs.nomLog += "log";
     }
-    
 
     return mesArgs;
 }
