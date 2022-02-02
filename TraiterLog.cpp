@@ -44,41 +44,54 @@ Arguments TraiterArgs(int nbArg, char *listArg[])
         return mesArgs;
     }
 
+    mesArgs.nomLog = listArg[nbArg - 1];
+    if ( mesArgs.nomLog.length() <= 4 || mesArgs.nomLog.compare( mesArgs.nomLog.length()- 4 ,4,".log") != 0 )
+    {
+        cerr << "Erreur ! Le fichier '.log' est mal définie ou mal positionné!" << endl;
+        cerr << "----Pensez à bien spécifiez le type '.log' et d'écrire le nom de fichier à la fin" << endl;
+        mesArgs.g = false;
+        mesArgs.e = false;
+        mesArgs.t = false;
+        mesArgs.nomDot = "";
+        mesArgs.nomLog = "";
+        mesArgs.heure = -1;
+    }
+
     for(int i = 1 ; i < nbArg - 1 ; ++i) // traitement des modes si il y en a
     {
         //cout << listArg[i] << endl;
 
         if( listArg[i][0] == '-' )
         {
-            if( listArg[i][1] == 'g' && i+2 <= nbArg ) // traitement du mode g
+            if( listArg[i][1] == 'g' && i+2 < nbArg ) // traitement du mode g
             {
                 mesArgs.g = true;
                 mesArgs.nomDot = listArg[++i];
 
-                cout << "g/dot: 1/" << mesArgs.nomDot << endl;
+                if ( mesArgs.nomDot.compare( mesArgs.nomDot.length()- 4 ,4,".dot") != 0 )
+                {
+                    cerr << "Erreur ! Le fichier '.dot' est mal définie !" << endl;
+                    cerr << " ---------Pensez à bien spécifiez le type '.dot' " << endl;
+                    mesArgs.g = false;
+                    mesArgs.nomDot = "";
+                }
             }
-            else if ( listArg[i][1] == 'e' && i+1 <= nbArg ) // traitement du mode e
+            else if ( listArg[i][1] == 'e' && i+1 < nbArg ) // traitement du mode e
             {
                 mesArgs.e = true;
-
-                cout << "e : 1" << endl;
             }
-            else if ( listArg[i][1] == 't' && i+2 <= nbArg ) // traitement du mode t
+            else if ( listArg[i][1] == 't' && i+2 < nbArg ) // traitement du mode t
             {
                 mesArgs.t = true;
                 mesArgs.heure = stoi(listArg[++i]);
-
-                cout << "t/heure: 1/" << mesArgs.heure << endl;
             }
             else
             {
-                cerr << "l'appel de fonction est incorecte" << endl;
+                cerr << "Erreur ! Un des modes n'est pas connu ou est mal défini !" << endl;
+                return mesArgs;
             }
         }
     }
-
-    mesArgs.nomLog = listArg[nbArg - 1];
-    cout << "Fichier Log : " << mesArgs.nomLog << endl;
 
     return mesArgs;
 }
