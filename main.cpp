@@ -1,9 +1,9 @@
 #include "TraiterLog.h"
 #include <iostream>
 
-int main(int nbArg, char *Arg [])
+int main(int nbArg, char *listArg [])
 {  
-    Analog( TraiterArgs(nbArg, Arg) );
+    Analog( TraiterArgs(nbArg, listArg) );
 
     return 0;
 }

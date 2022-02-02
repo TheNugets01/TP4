@@ -33,94 +33,52 @@ typedef pair<string, int> site;
 
 //--------------------------------------------------- Fonctions Ordinaires
 
-Arguments TraiterArgs(int nbArg, char *Arg[])
+Arguments TraiterArgs(int nbArg, char *listArg[])
 {
-    Arguments mesArgs; //= {'\0',"","",-1};
-    
-    string listArg = "";
-    for(int i=0 ; Arg[i] != NULL ; ++i)
+    Arguments mesArgs; //= {false,false,false,"","",-1};
+
+    if( nbArg == 1 )
+    // Traitement de l'oublie du nom du fichier log à traiter
     {
-            listArg += Arg[i]; // = ./analog-gfichier.dot\0
+        cerr << "l'appel  à la fonction n'est pas bien formé" << endl;
+        return mesArgs;
     }
 
-    listArg.erase(0 , 8); // enleve le ./analog des attributs
+    for(int i = 1 ; i < nbArg - 1 ; ++i) // traitement des modes si il y en a
+    {
+        //cout << listArg[i] << endl;
 
-    if( listArg.empty() )
-    {
-        cerr << "Le fichier .log à analyser n'est pas défini" << endl;
-    }
-    else
-    {
-        int str_it = 0;
-        //if ( listArg[0] == '-' ) //traitement des modes
-        //{
-        while( listArg[ str_it ] == '-' && str_it < 1000)
+        if( listArg[i][0] == '-' )
         {
-            ++str_it;
-            if( listArg[ str_it ] == 'g') // traitement du mode g
+            if( listArg[i][1] == 'g' && i+2 <= nbArg ) // traitement du mode g
             {
                 mesArgs.g = true;
-                cout << "g : " << mesArgs.g << endl;
+                mesArgs.nomDot = listArg[++i];
 
-                string verifType = "";
-                
-                ++str_it;
-                
-                do
-                {
-                    verifType.clear();
-                    for(int i = 0 ; i < 4 && str_it + i <=  listArg.length() ; ++i)
-                    {
-                        verifType += listArg[ str_it + i];
-                    }
-
-                    mesArgs.nomDot += listArg[ str_it ];
-
-                    ++str_it;
-
-                }while( verifType != ".dot");
-
-                str_it+=3; // permet de se placer au niveau du prochain '-' si il existe
-                
-                cout << mesArgs.nomDot + "dot" << endl;
+                cout << "g/dot: 1/" << mesArgs.nomDot << endl;
             }
-            else if( listArg[ str_it ] == 'e') // traitement du mode e
+            else if ( listArg[i][1] == 'e' && i+1 <= nbArg ) // traitement du mode e
             {
                 mesArgs.e = true;
-                cout << "e : " << mesArgs.e << endl;
-                ++str_it;
+
+                cout << "e : 1" << endl;
             }
-            else if( listArg[ str_it ] == 't')// traitement du mode t
+            else if ( listArg[i][1] == 't' && i+2 <= nbArg ) // traitement du mode t
             {
                 mesArgs.t = true;
-                cout << "t : " << mesArgs.t;
-                mesArgs.heure = (int(listArg[ ++str_it ]) - 48)*10 + int(listArg[ ++str_it ]) - 48;
-                cout << " heure : " << mesArgs.heure << endl;
+                mesArgs.heure = stoi(listArg[++i]);
 
-                ++str_it;
-
+                cout << "t/heure: 1/" << mesArgs.heure << endl;
+            }
+            else
+            {
+                cerr << "l'appel de fonction est incorecte" << endl;
             }
         }
-        //}
-
-        string verifType = "";
-        do
-        {
-            verifType.clear();
-            for(int i = 0 ; i < 4 && str_it + i <=  listArg.length() ; ++i)
-            {
-                verifType += listArg[ str_it + i];
-            }
-
-            mesArgs.nomLog += listArg[ str_it ];
-
-            ++str_it;
-
-        }while( verifType != ".log" && str_it < 1000);
-
-        cout << mesArgs.nomLog + "log" << endl;
     }
-    
+
+    mesArgs.nomLog = listArg[nbArg - 1];
+    cout << "Fichier Log : " << mesArgs.nomLog << endl;
 
     return mesArgs;
 }
