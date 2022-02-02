@@ -38,4 +38,3 @@ void Analog(Arguments mesArgs);
 void AfficherUM(unordered_map<string,int> & um);
 
 #endif // TRAITERLOG_H
-

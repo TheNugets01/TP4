@@ -16,6 +16,7 @@
 #include <stdio.h>
 #include <iostream>
 #include <vector>
+#include <list>
 #include <algorithm>
 using namespace std;
 
@@ -28,6 +29,8 @@ using namespace std;
 
 typedef unordered_map<string,int>::iterator umit;
 typedef pair<string, int> site;
+typedef list<site>::iterator lit;
+#define TAILLELISTE 10
 
 //----------------------------------------------------------------- PUBLIC
 
@@ -52,8 +55,6 @@ Arguments TraiterArgs(int nbArg, char *Arg[])
     else
     {
         int str_it = 0;
-        //if ( listArg[0] == '-' ) //traitement des modes
-        //{
         while( listArg[ str_it ] == '-' && str_it < 1000)
         {
             ++str_it;
@@ -82,7 +83,7 @@ Arguments TraiterArgs(int nbArg, char *Arg[])
 
                 str_it+=3; // permet de se placer au niveau du prochain '-' si il existe
                 
-                cout << mesArgs.nomDot + "dot" << endl;
+                mesArgs.nomDot += "dot";
             }
             else if( listArg[ str_it ] == 'e') // traitement du mode e
             {
@@ -118,7 +119,7 @@ Arguments TraiterArgs(int nbArg, char *Arg[])
 
         }while( verifType != ".log" && str_it < 1000);
 
-        cout << mesArgs.nomLog + "log" << endl;
+        mesArgs.nomLog += "log";
     }
     
 
@@ -135,26 +136,69 @@ bool cmp(const site & l, const site & r)
 
 void Top10(unordered_map<string,int> & um)
 {
-    vector<site> top10;
-    copy(um.begin(),um.end(),back_inserter<vector<site>>(top10));
-    sort(top10.begin(), top10.end(),cmp);
+    list<site> top10;
+    lit itl;
 
-    int size = top10.size();
-    if(size > 10)
+    for(umit itm = um.begin(); itm != um.end() ; ++itm)
     {
-        size = 10;
+        if(top10.empty())
+        {
+            top10.push_front(*itm);
+        }
+        else
+        {
+            itl = --top10.end();
+            if(top10.size()<TAILLELISTE)
+            {
+                while(itl != top10.begin() && itm->second > itl->second)
+                {
+                    --itl;
+                }
+                if(itm->second < itl->second)
+                {
+                    ++itl;
+                }
+                top10.insert(itl,*itm);
+            }
+            else
+            {
+                while(itl != top10.begin() && itm->second > itl->second)
+                {
+                    --itl;
+                }
+                if(itl!=--top10.end())
+                {
+                    if(itl != top10.begin())
+                    {
+                        ++itl;
+                        top10.insert(itl,*itm);
+                        top10.erase(--top10.end());
+                    }
+                    else
+                    {
+                        if(itm->second < itl->second)
+                        {
+                            ++itl;
+                        }
+                        top10.insert(itl,*itm);
+                        top10.erase(--top10.end());
+                    }
+                }
+            }
+        }
     }
-    for(int i = 0 ; i < size ; ++i)
+    for(itl = top10.begin(); itl != top10.end() ; ++itl)
     {
-        cout << top10[i].second << " : " << top10[i].first  << endl;
+       cout << itl->second << " : " << itl->first  << endl;
     }
+    cout << endl;
 }
 
 void Analog(Arguments mesArgs)
 {
     unordered_map<string,int> cptCible;
-    FluxLog src ("test.txt", ios_base::in);
-    //FluxLog src ("anonyme.log", ios_base::in);
+    //FluxLog src ("test.txt", ios_base::in);
+    FluxLog src ("anonyme.log", ios_base::in);
     int i = 0;
     while(src.peek()!=EOF)
     {
