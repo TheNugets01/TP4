@@ -1,28 +1,27 @@
-// argument_definitions.cpp
-// compile with: /EHsc
 #include <iostream>
-#include <string.h>
-
+#include <fstream>
+#include <cstring>
+#include <string>
+#include <set>
+#include <iterator>
 using namespace std;
-int main( int argc, char *argv[])
-{
-    string unwantedExtension [] = { ".png" , ".jpg" , ".bmp" , ".gif" , ".css" , ".js "}; 
-    cout << sizeof(unwantedExtension)/sizeof(unwantedExtension[0]) << endl;
 
-    
-    
-    /*bool numberLines = false;    // Default is no line numbers.
+int main() {
 
-    // If /n is passed to the .exe, display numbered listing
-    // of environment variables.
-    if ( (argc == 2) && strncmp( argv[1], "/n" , 100) == 0 )
-         numberLines = true;
+    string url = "http://intranet-if.insa-lyon.fr/!";
+    cout << url.erase(0, url.find("!") ) << endl;
 
-    // Walk through list of strings until a NULL is encountered.
-    for ( int i = 0; envp[i] != NULL; ++i )
+    /*bool valide = true;
+    size_t found = url.find(".css",0);
+    int nbExtensions = 3;
+    string extensions[nbExtensions] = {".css", ".JPG", ".js" };
+    int i = 0;
+    while (valide == true && i<nbExtensions)
     {
-        if ( numberLines )
-            cout << i << ": "; // Prefix with numbers if /n specified
-        cout << envp[i] << "\n";
+        found = url.find(extensions[i]);
+        if (found != string::npos) { valide = false ;}
+        ++i;
     }*/
+
+    return 0;
 }
