@@ -14,7 +14,7 @@
 
 #include <string>
 using namespace std;
-
+#include "TraiterLog.h"
 //------------------------------------------------------------- Constantes
 
 //------------------------------------------------------------------ Types
@@ -30,9 +30,10 @@ class Ligne
 //----------------------------------------------------------------- PUBLIC
 
 public:
-    int httpCode;
-    string cible;
+    
 //----------------------------------------------------- Méthodes publiques
+
+    //friend void Analog( Arguments mesArgs );
 
     void Afficher();
 
@@ -50,6 +51,10 @@ public:
     // Mode d'emploi :
     // Detruit la ligne
 
+    string date;
+    string cible;
+    int httpCode;
+    string referer;
 //------------------------------------------------------------------ PRIVE
 
 protected:
@@ -59,9 +64,7 @@ protected:
     string ip;
     string logName;
     string userName;
-    string date;
     int size;
-    string referer;
     string client;
 
 };

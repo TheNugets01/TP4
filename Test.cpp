@@ -4,9 +4,14 @@
 #include <string.h>
 
 using namespace std;
-int main( int argc, char *argv[], char *envp[] )
+int main( int argc, char *argv[])
 {
-    bool numberLines = false;    // Default is no line numbers.
+    string unwantedExtension [] = { ".png" , ".jpg" , ".bmp" , ".gif" , ".css" , ".js "}; 
+    cout << sizeof(unwantedExtension)/sizeof(unwantedExtension[0]) << endl;
+
+    
+    
+    /*bool numberLines = false;    // Default is no line numbers.
 
     // If /n is passed to the .exe, display numbered listing
     // of environment variables.
@@ -19,5 +24,5 @@ int main( int argc, char *argv[], char *envp[] )
         if ( numberLines )
             cout << i << ": "; // Prefix with numbers if /n specified
         cout << envp[i] << "\n";
-    }
+    }*/
 }

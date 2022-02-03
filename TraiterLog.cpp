@@ -16,18 +16,21 @@
 #include <stdio.h>
 #include <iostream>
 #include <vector>
-#include <list>
 #include <algorithm>
 using namespace std;
 
 //------------------------------------------------------ Include personnel
 
-#include "FluxLog.h"
+
 #include "TraiterLog.h"
 
 //------------------------------------------------------------- Constantes
-
+typedef unordered_map<string,int> umSI;
 typedef unordered_map<string,int>::iterator umit;
+
+typedef unordered_map<string , unordered_map<string,int>> umSumSI;
+typedef unordered_map<string , unordered_map<string,int>>::iterator umumit ;
+
 typedef pair<string, int> site;
 typedef list<site>::iterator lit;
 #define TAILLELISTE 10
@@ -169,17 +172,35 @@ void Top10(unordered_map<string,int> & um)
 
 void Analog(Arguments mesArgs)
 {
-    unordered_map<string,int> cptCible;
-    //FluxLog src ("test.txt", ios_base::in);
-    FluxLog src ("anonyme.log", ios_base::in);
-    int i = 0;
+    FluxLog src ( mesArgs.nomLog , ios_base::in);
+    
+    if( mesArgs.g )
+    {
+        unordered_map< string , unordered_map<string,int> > cptLink;
+    }
+    else
+    {
+        unordered_map<string,int> cptLink;
+        FillUM( cptLink , src , mesArgs);
+    }
+    
+    //FillUM( cptLink , src , mesArgs);
+    
+    
+    
+    
+    
+    //FluxLog src ("test.log", ios_base::in);
+    //int i = 0;
+    /*unordered_map<string,int> cptCible;
+
     while(src.peek()!=EOF)
     {
         umit it;
         Ligne ligneCourante(src.LireLigne());
 
         int httpCode = ligneCourante.httpCode;
-        string cible = ligneCourante.cible; 
+        string cible = ligneCourante.cible;
         if(httpCode == 200 || httpCode == 304)
         {
             it = cptCible.find(cible);
@@ -192,10 +213,86 @@ void Analog(Arguments mesArgs)
                 it->second++;
             }
         }
-        i++;
+        //i++;
+    }
+    //AfficherUM(cptCible);
+    Top10(cptCible);*/
+}
+
+bool checkTimes( int hLigne , int hCond)
+{
+    bool checkTimes = true;
+    if( hLigne < hCond || hLigne > hCond+1 )
+    {
+        checkTimes = false;
+    }
+
+    return checkTimes;
+} 
+
+void FillUM( umSI & cptCible , FluxLog & src , Arguments & mesArgs) //Sans Graph
+{
+    while(src.peek()!=EOF)
+    {
+        umit it;
+        Ligne ligneCourante(src.LireLigne());
+
+        int httpCode = ligneCourante.httpCode;
+        string cible = ligneCourante.cible;
+        string date = ligneCourante.date;
+        int hLigne = stoi( date.erase(0,12).erase(2,12) );
+
+        // -----Traitement du mode -t
+        bool chkTimes = true;
+        bool extensionType = true;
+        if( mesArgs.t )
+        {
+            chkTimes = checkTimes( hLigne , mesArgs.heure );
+        }
+        // -----Fin du traitement de -t
+        
+        // TRAITEMENT DU MODE -e
+        /*if( mesArgs.e )
+        {
+            string unwantedExtension [] = { ".png" , ".jpg" , ".bmp" , ".gif" , ".css" , ".js "}; 
+            int sizeTab = sizeof(unwantedExtension)/sizeof(unwantedExtension[0]);
+
+            for(int i = 0; i < cible.length()-4 ; ++i)
+            {
+                for(int j = 0 ; j < sizeTab ; ++j)
+                {
+                    if( cible.compare( i ,4,unwantedExtension[j]) == 0 )
+                    {
+                        extensionType = false;
+                    }
+                }
+            }
+        }*/
+
+        if( (httpCode == 200 || httpCode == 304) && chkTimes && extensionType)
+        //Check des httpCode et des conditions de mode
+        {
+            it = cptCible.find(cible);
+
+            if(it == cptCible.end())
+            {
+                cptCible.insert({cible,1});
+            }
+            else
+            {
+                it->second++;
+            }
+        }
+
+        //cout << mesArgs.heure << "/" << heureLigne << ":" << chekTimes << endl;
     }
     //AfficherUM(cptCible);
     Top10(cptCible);
+}
+
+void FillUM( umSumSI & cptRefCib , FluxLog & src , Arguments & mesArgs) //Avec Graph
+{
+
 }
 
 void AfficherUM(unordered_map<string,int> & um)
