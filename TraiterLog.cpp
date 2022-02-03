@@ -233,11 +233,11 @@ bool checkTimes( int hLigne , int hCond)
 
 void FillUM( umSI & cptCible , FluxLog & src , Arguments & mesArgs) //Sans Graph
 {
-    while(src.peek()!=EOF)
+    while(src.peek()!=EOF) // un truc smart a faire serait de tout déclarer en dehors du while
     {
         umit it;
-        Ligne ligneCourante(src.LireLigne());
 
+        Ligne ligneCourante(src.LireLigne());
         int httpCode = ligneCourante.httpCode;
         string cible = ligneCourante.cible;
         string date = ligneCourante.date;
@@ -293,7 +293,66 @@ void FillUM( umSI & cptCible , FluxLog & src , Arguments & mesArgs) //Sans Graph
 
 void FillUM( umSumSI & cptRefCib , FluxLog & src , Arguments & mesArgs) //Avec Graph
 {
+    umumit itref; // itérateur map contenant les refereur
+    umit itcib; // itérateur map contenant les cibles
 
+    int httpCode;
+    string cible;
+    string referer;
+    string date;
+    int hLigne;
+
+    bool chkTimes;
+    bool extensionType;
+
+    while(src.peek()!=EOF)
+    {
+        Ligne ligneCourante(src.LireLigne());
+
+        httpCode = ligneCourante.httpCode;
+        cible = ligneCourante.cible;
+        referer = ligneCourante.referer;
+        date = ligneCourante.date;
+        hLigne = stoi( date.erase(0,12).erase(2,12) );
+
+        // -----Traitement du mode -t
+        chkTimes = true;
+        if( mesArgs.t )
+        {
+            chkTimes = checkTimes( hLigne , mesArgs.heure );
+        }
+        // -----Fin du traitement de -t
+
+        // -----Traitement du mode -e
+            extensionType = true;
+        // -----Fin du traitement de -e
+
+        if( (httpCode == 200 || httpCode == 304) && chkTimes && extensionType)
+        //Check des httpCode et des conditions de mode
+        {
+            itref = cptRefCib.find(referer);
+
+            if(itref == cptRefCib.end())
+            {
+                umSI m = {{cible,1}};
+                cptRefCib.insert({referer,m});
+            }
+            else
+            {
+                itcib = itref->second.find(cible);
+                
+                if(itref == cptRefCib.end())
+                {
+                    umSI m = {{cible,1}};
+                    cptRefCib.insert({referer,m});
+                }
+                else
+                {
+                    itcib = itref->second.find(cible);
+                }
+            }
+        }
+    }
 }
 
 void AfficherUM(unordered_map<string,int> & um)
