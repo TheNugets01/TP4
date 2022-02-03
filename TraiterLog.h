@@ -38,6 +38,7 @@ Arguments TraiterArgs(int nbArg, char *listArg []);
 void Analog(Arguments mesArgs);
 void AfficherUM(unordered_map<string,int> & um);
 void Top10(unordered_map<string,int> & um);
+bool checkTimes( int hLigne , int hCond);
 
 void FillUM( unordered_map<string,int> & cptCible , FluxLog & src , Arguments & mesArgs);
 void FillUM( unordered_map<string , unordered_map<string,int>> & cptRefCib , FluxLog & src , Arguments & mesArgs);

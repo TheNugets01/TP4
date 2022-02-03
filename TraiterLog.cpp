@@ -177,6 +177,7 @@ void Analog(Arguments mesArgs)
     if( mesArgs.g )
     {
         unordered_map< string , unordered_map<string,int> > cptLink;
+        FillUM( cptLink , src , mesArgs);
     }
     else
     {
@@ -222,7 +223,7 @@ void Analog(Arguments mesArgs)
 bool checkTimes( int hLigne , int hCond)
 {
     bool checkTimes = true;
-    if( hLigne < hCond || hLigne > hCond+1 )
+    if( hLigne != hCond )
     {
         checkTimes = false;
     }
