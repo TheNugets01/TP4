@@ -102,14 +102,6 @@ Arguments TraiterArgs(int nbArg, char *listArg[])
     return mesArgs;
 }
 
-bool cmp(const site & l, const site & r)
-{
-    if (l.second != r.second) {
-        return l.second > r.second;
-    }
-    return l.first > r.first;
-}
-
 void Top10(unordered_map<string,int> & um)
 {
     list<site> top10;
@@ -172,8 +164,9 @@ void Top10(unordered_map<string,int> & um)
 
 void Analog(Arguments mesArgs)
 {
-    FluxLog src ( mesArgs.nomLog , ios_base::in);
-    
+    //FluxLog src ( mesArgs.nomLog , ios_base::in);
+    FluxLog src ( "test.log" , ios_base::in);
+
     if( mesArgs.g )
     {
         unordered_map< string , unordered_map<string,int> > cptLink;
@@ -340,19 +333,19 @@ void FillUM( umSumSI & cptRefCib , FluxLog & src , Arguments & mesArgs) //Avec G
             else
             {
                 itcib = itref->second.find(cible);
-                
-                if(itref == cptRefCib.end())
+
+                if(itcib == itref->second.end())
                 {
-                    umSI m = {{cible,1}};
-                    cptRefCib.insert({referer,m});
+                    itref->second.insert({cible,1});
                 }
                 else
                 {
-                    itcib = itref->second.find(cible);
+                    itcib->second++;
                 }
             }
         }
     }
+    AfficherUM(cptRefCib);
 }
 
 void AfficherUM(unordered_map<string,int> & um)
@@ -360,6 +353,18 @@ void AfficherUM(unordered_map<string,int> & um)
     for(umit it = um.begin(); it != um.end() ; ++it)
     {
         cout << '<' << it->first << ',' << it->second << '>' << endl;
+    }
+}
+
+void AfficherUM(umSumSI & um)
+{
+    for(umumit it = um.begin(); it != um.end() ; ++it)
+    {
+        cout << it->first << " :"<< endl;
+        for(umit it2 = it->second.begin(); it2 != it->second.end() ; ++it2)
+        {
+            cout << "   - " << '<' << it2->first << ',' << it2->second << '>' << endl;
+        }
     }
 }
 

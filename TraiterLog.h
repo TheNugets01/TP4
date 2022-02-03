@@ -37,6 +37,7 @@ struct Arguments {
 Arguments TraiterArgs(int nbArg, char *listArg []);
 void Analog(Arguments mesArgs);
 void AfficherUM(unordered_map<string,int> & um);
+void AfficherUM(unordered_map<string , unordered_map<string,int>> & um);
 void Top10(unordered_map<string,int> & um);
 bool checkTimes( int hLigne , int hCond);
 
