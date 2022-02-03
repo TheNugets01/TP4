@@ -31,6 +31,8 @@ typedef unordered_map<string,int>::iterator umit;
 typedef unordered_map<string , unordered_map<string,int>> umSumSI;
 typedef unordered_map<string , unordered_map<string,int>>::iterator umumit ;
 
+typedef vector<string>::iterator vsit;
+
 typedef pair<string, int> site;
 typedef list<site>::iterator lit;
 #define TAILLELISTE 10
@@ -110,7 +112,7 @@ bool cmp(const site & l, const site & r)
     return l.first > r.first;
 }
 
-void Top10(unordered_map<string,int> & um)
+void Top10( umSI & um)
 {
     list<site> top10;
     lit itl;
@@ -170,6 +172,43 @@ void Top10(unordered_map<string,int> & um)
     cout << endl;
 }
 
+void Graph( umSumSI cptRefCib )
+{
+    vector<string> Nodes;
+    vsit idxNode;
+    string urlInsa = "http://intranet-if.insa-lyon.fr";
+
+    string referer;
+    string cible;
+    int nbLink;
+
+    size_t found;
+
+    /*for( umumit itRef = cptRefCib.begin() ; itRef != cptRefCib.end() ; ++itRef )
+    {
+        referer = itRef->first;
+        cible = ( itRef->second )-> first;
+
+        found = referer.find( urlInsa );
+        if( found != string::npos )
+        {
+            referer = referer.erase(0 , urlInsa.length() );
+        }
+
+        idxNode = find(Nodes.begin(),Nodes.end(), referer );
+    }*/
+
+    /*digraph{
+    node1 [label="page1.html"];
+    node0 [label="page2.html"];
+    node2 [label="page3.html"];
+    node0 -> node1 [label="1"];
+    node0 -> node2 [label="1"];
+    node1 -> node0 [label="2"];
+    node2 -> node0 [label="1"];
+    }*/
+}
+
 void Analog(Arguments mesArgs)
 {
     FluxLog src ( mesArgs.nomLog , ios_base::in);
@@ -178,6 +217,7 @@ void Analog(Arguments mesArgs)
     {
         unordered_map< string , unordered_map<string,int> > cptLink;
         FillUM( cptLink , src , mesArgs);
+        Graph( cptLink );
     }
     else
     {
@@ -231,6 +271,26 @@ bool checkTimes( int hLigne , int hCond)
     return checkTimes;
 } 
 
+bool checkExtension( string cible )
+{
+    bool extensionType = true;
+    size_t found;
+    string unwantedExtension[] = { ".png" , ".jpg" , ".bmp" , ".gif" , ".css" , ".js"};
+    int nbExtensions = 6;
+    int i = 0;
+    while (extensionType == true && i<nbExtensions)
+    {
+        found = cible.find(unwantedExtension[i]);
+        if (found != string::npos) 
+        {
+            extensionType = false ;
+        }
+        ++i;
+    }
+    
+    return extensionType;
+}
+
 void FillUM( umSI & cptCible , FluxLog & src , Arguments & mesArgs) //Sans Graph
 {
     while(src.peek()!=EOF) // un truc smart a faire serait de tout déclarer en dehors du while
@@ -253,6 +313,7 @@ void FillUM( umSI & cptCible , FluxLog & src , Arguments & mesArgs) //Sans Graph
         // -----Fin du traitement de -t
         
         // TRAITEMENT DU MODE -e
+        extensionType = checkExtension( cible );
         /*if( mesArgs.e )
         {
             string unwantedExtension [] = { ".png" , ".jpg" , ".bmp" , ".gif" , ".css" , ".js "}; 
@@ -324,8 +385,8 @@ void FillUM( umSumSI & cptRefCib , FluxLog & src , Arguments & mesArgs) //Avec G
         // -----Fin du traitement de -t
 
         // -----Traitement du mode -e
-            extensionType = true;
-        // -----Fin du traitement de -e
+        extensionType = checkExtension( cible );
+        // -----Fin du traitement de -e 
 
         if( (httpCode == 200 || httpCode == 304) && chkTimes && extensionType)
         //Check des httpCode et des conditions de mode
@@ -355,7 +416,7 @@ void FillUM( umSumSI & cptRefCib , FluxLog & src , Arguments & mesArgs) //Avec G
     }
 }
 
-void AfficherUM(unordered_map<string,int> & um)
+void AfficherUM( umSI & um)
 {
     for(umit it = um.begin(); it != um.end() ; ++it)
     {
