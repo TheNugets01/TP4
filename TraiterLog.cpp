@@ -167,28 +167,76 @@ void Top10( umSI & um)
 void Graph( umSumSI cptRefCib )
 {
     vector<string> Nodes;
-    vsit idxNode;
+    // vsit idxRef;
+    // vsit idxCib;
+    int posRef;
+    int posCib;
+    int hits;
+
     string urlInsa = "http://intranet-if.insa-lyon.fr";
 
     string referer;
     string cible;
     int nbLink;
-
+    int i;
+    //int nbNodes = 0;
     size_t found;
+    bool inNodes;
 
-    /*for( umumit itRef = cptRefCib.begin() ; itRef != cptRefCib.end() ; ++itRef )
+    umit itCib;
+
+    for( umumit itRef = cptRefCib.begin() ; itRef != cptRefCib.end() ; ++itRef )
     {
-        referer = itRef->first;
-        cible = ( itRef->second )-> first;
-
-        found = referer.find( urlInsa );
+        referer = itRef->first; // init referer
+        found = referer.find( urlInsa ); //formatage du referer sans l'url insa
         if( found != string::npos )
         {
             referer = referer.erase(0 , urlInsa.length() );
         }
 
-        idxNode = find(Nodes.begin(),Nodes.end(), referer );
-    }*/
+        i = 0;
+        inNodes = false;
+        while(!inNodes && i<Nodes.size())
+        {
+            if(Nodes[i]==referer)
+            {
+                inNodes = true;
+                posRef = i;
+            }
+            ++i;
+        }
+        if(!inNodes)
+        {
+            posRef = Nodes.size();
+            Nodes.push_back(referer);
+            // OUT << "node" << posRef << "[label="" << referer << ""];" << endl;
+        }
+
+        for(umit itCib = itRef->second.begin() ; itCib!= itRef->second.end() ; ++itCib)
+        {
+            cible = itCib->first;
+            hits = itCib->second;
+
+            i = 0;
+            inNodes = false;
+            while(!inNodes && i<Nodes.size())
+            {
+                if(Nodes[i]==cible)
+                {
+                    inNodes = true;
+                    posCib = i;
+                }
+                ++i;
+            }
+            if(!inNodes)
+            {
+                posCib = Nodes.size();
+                Nodes.push_back(cible);
+                // OUT << "node" << posCib << "[label="" << referer << ""];" << endl;
+            }
+            // OUT << "node" << posRef << " -> " << "node" << posCib << " [label="" << hits << ""];" << endl;
+        }
+    }
 
     /*digraph{
     node1 [label="page1.html"];
