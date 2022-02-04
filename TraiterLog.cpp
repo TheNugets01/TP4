@@ -164,8 +164,10 @@ void Top10( umSI & um)
     cout << endl;
 }
 
-void Graph( umSumSI cptRefCib )
+void Graph( umSumSI cptRefCib , string nomDot )
 {
+    ofstream dest (nomDot);
+
     vector<string> Nodes;
     // vsit idxRef;
     // vsit idxCib;
@@ -185,6 +187,8 @@ void Graph( umSumSI cptRefCib )
 
     umit itCib;
 
+    dest << "digraph {" << endl;
+
     for( umumit itRef = cptRefCib.begin() ; itRef != cptRefCib.end() ; ++itRef )
     {
         referer = itRef->first; // init referer
@@ -192,6 +196,15 @@ void Graph( umSumSI cptRefCib )
         if( found != string::npos )
         {
             referer = referer.erase(0 , urlInsa.length() );
+        }
+        else
+        {
+            continue;
+        }
+
+        if(referer.back() == '/')
+        {
+            referer.pop_back();
         }
 
         i = 0;
@@ -209,14 +222,17 @@ void Graph( umSumSI cptRefCib )
         {
             posRef = Nodes.size();
             Nodes.push_back(referer);
-            // OUT << "node" << posRef << "[label="" << referer << ""];" << endl;
+            dest << "node" << posRef << "[label=" << '"' << referer << '"' << "];" << endl;
         }
 
         for(umit itCib = itRef->second.begin() ; itCib!= itRef->second.end() ; ++itCib)
         {
             cible = itCib->first;
             hits = itCib->second;
-
+            if(cible.back() == '/')
+            {
+                cible.pop_back();
+            }
             i = 0;
             inNodes = false;
             while(!inNodes && i<Nodes.size())
@@ -232,33 +248,24 @@ void Graph( umSumSI cptRefCib )
             {
                 posCib = Nodes.size();
                 Nodes.push_back(cible);
-                // OUT << "node" << posCib << "[label="" << referer << ""];" << endl;
+                dest << "node" << posCib << "[label=" << '"' << cible << '"' << "];" << endl;
             }
-            // OUT << "node" << posRef << " -> " << "node" << posCib << " [label="" << hits << ""];" << endl;
+            dest << "node" << posRef << " -> " << "node" << posCib << " [label=" << '"' << hits << '"' << "];" << endl;
         }
     }
-
-    /*digraph{
-    node1 [label="page1.html"];
-    node0 [label="page2.html"];
-    node2 [label="page3.html"];
-    node0 -> node1 [label="1"];
-    node0 -> node2 [label="1"];
-    node1 -> node0 [label="2"];
-    node2 -> node0 [label="1"];
-    }*/
+    dest << '}';
 }
 
 void Analog(Arguments mesArgs)
 {
-    //FluxLog src ( mesArgs.nomLog , ios_base::in);
-    FluxLog src ( "test.log" , ios_base::in);
+    FluxLog src ( mesArgs.nomLog , ios_base::in);
+    //FluxLog src ( "test.log" , ios_base::in);
 
     if( mesArgs.g )
     {
         unordered_map< string , unordered_map<string,int> > cptLink;
         FillUM( cptLink , src , mesArgs);
-        Graph( cptLink );
+        Graph( cptLink , mesArgs.nomDot);
     }
     else
     {
@@ -412,7 +419,7 @@ void FillUM( umSumSI & cptRefCib , FluxLog & src , Arguments & mesArgs) //Avec G
             }
         }
     }
-    AfficherUM(cptRefCib);
+    //AfficherUM(cptRefCib);
 }
 
 void AfficherUM( umSI & um)
