@@ -159,7 +159,7 @@ void Top10( umSI & um)
     }
     for(itl = top10.begin(); itl != top10.end() ; ++itl)
     {
-       cout << itl->second << " : " << itl->first  << endl;
+       cout << '(' << itl->second << " hits) " << itl->first  << endl;
     }
     cout << endl;
 }
@@ -169,8 +169,7 @@ void Graph( umSumSI cptRefCib , string nomDot )
     ofstream dest (nomDot);
 
     vector<string> Nodes;
-    // vsit idxRef;
-    // vsit idxCib;
+
     int posRef;
     int posCib;
     int hits;
@@ -181,7 +180,7 @@ void Graph( umSumSI cptRefCib , string nomDot )
     string cible;
     int nbLink;
     int i;
-    //int nbNodes = 0;
+
     size_t found;
     bool inNodes;
 
@@ -254,12 +253,12 @@ void Graph( umSumSI cptRefCib , string nomDot )
         }
     }
     dest << '}';
+    cout << "fichier " << nomDot << " creer avec succes" << endl;
 }
 
 void Analog(Arguments mesArgs)
 {
     FluxLog src ( mesArgs.nomLog , ios_base::in);
-    //FluxLog src ( "test.log" , ios_base::in);
 
     if( mesArgs.g )
     {
@@ -307,18 +306,27 @@ bool checkExtension( string cible )
 
 void FillUM( umSI & cptCible , FluxLog & src , Arguments & mesArgs) //Sans Graph
 {
-    while(src.peek()!=EOF) // un truc smart a faire serait de tout déclarer en dehors du while
+    umit it;
+
+    int httpCode;
+    string cible;
+    string date;
+    int hLigne;
+
+    bool chkTimes;
+    bool extensionType;
+
+    while(src.peek()!=EOF)
     {
-        umit it;
 
         Ligne ligneCourante(src.LireLigne());
-        int httpCode = ligneCourante.httpCode;
-        string cible = ligneCourante.cible;
-        string date = ligneCourante.date;
-        int hLigne = stoi( date.erase(0,12).erase(2,12) );
+        httpCode = ligneCourante.httpCode;
+        cible = ligneCourante.cible;
+        date = ligneCourante.date;
+        hLigne = stoi( date.erase(0,12).erase(2,12) );
 
         // -----Traitement du mode -t
-        bool chkTimes = true;
+        chkTimes = true;
         if( mesArgs.t )
         {
             chkTimes = checkTimes( hLigne , mesArgs.heure );
@@ -326,7 +334,7 @@ void FillUM( umSI & cptCible , FluxLog & src , Arguments & mesArgs) //Sans Graph
         // -----Fin du traitement de -t
         
         // -----Traitement du mode -e
-        bool extensionType = true;
+        extensionType = true;
         if( mesArgs.e )
         {
             extensionType = checkExtension( cible );
@@ -347,10 +355,7 @@ void FillUM( umSI & cptCible , FluxLog & src , Arguments & mesArgs) //Sans Graph
                 it->second++;
             }
         }
-
-        //cout << mesArgs.heure << "/" << heureLigne << ":" << chekTimes << endl;
     }
-    //AfficherUM(cptCible);
     Top10(cptCible);
 }
 
@@ -419,7 +424,6 @@ void FillUM( umSumSI & cptRefCib , FluxLog & src , Arguments & mesArgs) //Avec G
             }
         }
     }
-    //AfficherUM(cptRefCib);
 }
 
 void AfficherUM( umSI & um)
