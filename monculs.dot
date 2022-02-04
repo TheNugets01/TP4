@@ -1,0 +1,19 @@
+digraph {
+node0[label="/temps/4IF19.html"];
+node1[label="/temps/4IF20.html"];
+node0 -> node1 [label="1"];
+node2[label="/temps/4IF18.html"];
+node2 -> node0 [label="1"];
+node2 -> node2 [label="1"];
+node3[label="/temps/4IF17.html"];
+node3 -> node2 [label="2"];
+node4[label="/temps/4IF15.html"];
+node5[label="/temps/4IF16.css"];
+node4 -> node5 [label="1"];
+node6[label="/temps/4IF16.js"];
+node4 -> node6 [label="1"];
+node7[label="/temps/4IF16.html"];
+node4 -> node7 [label="3"];
+node8[label="/temps/4IF16.png"];
+node4 -> node8 [label="1"];
+}

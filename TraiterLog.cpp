@@ -25,11 +25,6 @@ using namespace std;
 #include "TraiterLog.h"
 
 //------------------------------------------------------------- Constantes
-typedef unordered_map<string,int> umSI;
-typedef unordered_map<string,int>::iterator umit;
-
-typedef unordered_map<string , unordered_map<string,int>> umSumSI;
-typedef unordered_map<string , unordered_map<string,int>>::iterator umumit ;
 
 typedef vector<string>::iterator vsit;
 
@@ -159,7 +154,7 @@ void Top10( umSI & um)
     }
     for(itl = top10.begin(); itl != top10.end() ; ++itl)
     {
-       cout << '(' << itl->second << " hits) " << itl->first  << endl;
+       cout << itl->second << " : " << itl->first  << endl;
     }
     cout << endl;
 }
@@ -169,7 +164,8 @@ void Graph( umSumSI cptRefCib , string nomDot )
     ofstream dest (nomDot);
 
     vector<string> Nodes;
-
+    // vsit idxRef;
+    // vsit idxCib;
     int posRef;
     int posCib;
     int hits;
@@ -180,7 +176,7 @@ void Graph( umSumSI cptRefCib , string nomDot )
     string cible;
     int nbLink;
     int i;
-
+    //int nbNodes = 0;
     size_t found;
     bool inNodes;
 
@@ -253,24 +249,16 @@ void Graph( umSumSI cptRefCib , string nomDot )
         }
     }
     dest << '}';
-    cout << "fichier " << nomDot << " creer avec succes" << endl;
 }
 
 void Analog(Arguments mesArgs)
 {
     FluxLog src ( mesArgs.nomLog , ios_base::in);
+    //FluxLog src ( "test.log" , ios_base::in);
 
-    if( mesArgs.g )
-    {
-        unordered_map< string , unordered_map<string,int> > cptLink;
-        FillUM( cptLink , src , mesArgs);
-        Graph( cptLink , mesArgs.nomDot);
-    }
-    else
-    {
-        unordered_map<string,int> cptLink;
-        FillUM( cptLink , src , mesArgs);
-    }
+    unordered_map< string , unordered_map<string,int> > cptRefCib;
+    unordered_map<string,int> cptCible;
+    FillUM(src , mesArgs , cptCible, cptRefCib );
 }
 
 bool checkTimes( int hLigne , int hCond)
@@ -304,29 +292,20 @@ bool checkExtension( string cible )
     return extensionType;
 }
 
-void FillUM( umSI & cptCible , FluxLog & src , Arguments & mesArgs) //Sans Graph
+/*void FillUM( umSI & cptCible , FluxLog & src , Arguments & mesArgs) //Sans Graph
 {
-    umit it;
-
-    int httpCode;
-    string cible;
-    string date;
-    int hLigne;
-
-    bool chkTimes;
-    bool extensionType;
-
-    while(src.peek()!=EOF)
+    while(src.peek()!=EOF) // un truc smart a faire serait de tout déclarer en dehors du while
     {
+        umit it;
 
         Ligne ligneCourante(src.LireLigne());
-        httpCode = ligneCourante.httpCode;
-        cible = ligneCourante.cible;
-        date = ligneCourante.date;
-        hLigne = stoi( date.erase(0,12).erase(2,12) );
+        int httpCode = ligneCourante.httpCode;
+        string cible = ligneCourante.cible;
+        string date = ligneCourante.date;
+        int hLigne = stoi( date.erase(0,12).erase(2,12) );
 
         // -----Traitement du mode -t
-        chkTimes = true;
+        bool chkTimes = true;
         if( mesArgs.t )
         {
             chkTimes = checkTimes( hLigne , mesArgs.heure );
@@ -334,7 +313,7 @@ void FillUM( umSI & cptCible , FluxLog & src , Arguments & mesArgs) //Sans Graph
         // -----Fin du traitement de -t
         
         // -----Traitement du mode -e
-        extensionType = true;
+        bool extensionType = true;
         if( mesArgs.e )
         {
             extensionType = checkExtension( cible );
@@ -355,11 +334,15 @@ void FillUM( umSI & cptCible , FluxLog & src , Arguments & mesArgs) //Sans Graph
                 it->second++;
             }
         }
+
+        //cout << mesArgs.heure << "/" << heureLigne << ":" << chekTimes << endl;
     }
+    //AfficherUM(cptCible);
     Top10(cptCible);
 }
+*/
 
-void FillUM( umSumSI & cptRefCib , FluxLog & src , Arguments & mesArgs) //Avec Graph
+void FillUM( FluxLog & src , Arguments & mesArgs , umSI & cptCible ,umSumSI & cptRefCib) //Avec Graph
 {
     umumit itref; // itérateur map contenant les refereur
     umit itcib; // itérateur map contenant les cibles
@@ -399,30 +382,55 @@ void FillUM( umSumSI & cptRefCib , FluxLog & src , Arguments & mesArgs) //Avec G
         }
         // -----Fin du traitement de -e
 
+
         if( (httpCode == 200 || httpCode == 304) && chkTimes && extensionType)
         //Check des httpCode et des conditions de mode
         {
-            itref = cptRefCib.find(referer);
-
-            if(itref == cptRefCib.end())
+            if(mesArgs.g)
+            //remplissage de la double UM si besoins
             {
-                umSI m = {{cible,1}};
-                cptRefCib.insert({referer,m});
-            }
-            else
-            {
-                itcib = itref->second.find(cible);
+                itref = cptRefCib.find(referer);
 
-                if(itcib == itref->second.end())
+                if(itref == cptRefCib.end())
                 {
-                    itref->second.insert({cible,1});
+                    umSI m = {{cible,1}};
+                    cptRefCib.insert({referer,m});
                 }
                 else
                 {
-                    itcib->second++;
+                    itcib = itref->second.find(cible);
+
+                    if(itcib == itref->second.end())
+                    {
+                        itref->second.insert({cible,1});
+                    }
+                    else
+                    {
+                        itcib->second++;
+                    }
                 }
             }
+
+            //Remplissage de cptCible pour le Top10
+            itcib = cptCible.find(cible);
+
+            if(itcib == cptCible.end())
+            {
+                cptCible.insert({cible,1});
+            }
+            else
+            {
+                itcib->second++;
+            }
         }
+    }
+    //AfficherUM(cptRefCib);
+
+    Top10(cptCible);
+
+    if(mesArgs.g)
+    {
+        Graph( cptRefCib , mesArgs.nomDot);
     }
 }
 

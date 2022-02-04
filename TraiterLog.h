@@ -18,7 +18,11 @@
 using namespace std;
 #include "FluxLog.h"
 //------------------------------------------------------------- Constantes
+typedef unordered_map<string,int> umSI;
+typedef unordered_map<string,int>::iterator umit;
 
+typedef unordered_map<string , unordered_map<string,int>> umSumSI;
+typedef unordered_map<string , unordered_map<string,int>>::iterator umumit ;
 //------------------------------------------------------------------ Types
 struct Arguments {
     bool g = false;
@@ -36,13 +40,12 @@ struct Arguments {
 
 Arguments TraiterArgs(int nbArg, char *listArg []);
 void Analog(Arguments mesArgs);
-void AfficherUM(unordered_map<string,int> & um);
-void AfficherUM(unordered_map<string , unordered_map<string,int>> & um);
-void Top10(unordered_map<string,int> & um);
+void AfficherUM( umSI & um);
+void AfficherUM(umSumSI & um);
+void Top10( umSI & um);
 bool checkTimes( int hLigne , int hCond);
-void Graph( unordered_map<string , unordered_map<string,int>> cptRefCib );
+void Graph( umSumSI cptRefCib );
 
-void FillUM( unordered_map<string,int> & cptCible , FluxLog & src , Arguments & mesArgs);
-void FillUM( unordered_map<string , unordered_map<string,int>> & cptRefCib , FluxLog & src , Arguments & mesArgs);
+void FillUM( FluxLog & src , Arguments & mesArgs , umSI & cptCible , umSumSI & cptRefCib);
 
 #endif // TRAITERLOG_H
