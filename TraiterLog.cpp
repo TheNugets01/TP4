@@ -154,7 +154,7 @@ void Top10( umSI & um)
     }
     for(itl = top10.begin(); itl != top10.end() ; ++itl)
     {
-       cout << itl->second << " : " << itl->first  << endl;
+       cout << "(" << itl->second <<" hits) " << itl->first  << endl;
     }
     cout << endl;
 }
@@ -259,6 +259,13 @@ void Analog(Arguments mesArgs)
     unordered_map< string , unordered_map<string,int> > cptRefCib;
     unordered_map<string,int> cptCible;
     FillUM(src , mesArgs , cptCible, cptRefCib );
+    
+    Top10(cptCible);
+
+    if(mesArgs.g)
+    {
+        Graph( cptRefCib , mesArgs.nomDot);
+    }
 }
 
 bool checkTimes( int hLigne , int hCond)
@@ -425,13 +432,6 @@ void FillUM( FluxLog & src , Arguments & mesArgs , umSI & cptCible ,umSumSI & cp
         }
     }
     //AfficherUM(cptRefCib);
-
-    Top10(cptCible);
-
-    if(mesArgs.g)
-    {
-        Graph( cptRefCib , mesArgs.nomDot);
-    }
 }
 
 void AfficherUM( umSI & um)
