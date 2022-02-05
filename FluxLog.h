@@ -12,10 +12,8 @@
 
 //--------------------------------------------------- Interfaces utilisées
 
-#include <string>
 #include <fstream>
 #include "Ligne.h"
-using namespace std;
 
 //------------------------------------------------------------- Constantes
 
@@ -36,6 +34,8 @@ public:
 //----------------------------------------------------- Méthodes publiques
 
     Ligne LireLigne();
+    // Mode d'emploi
+    // Construit un objet Ligne a partir d'une ligne du fichier de log
 
 //------------------------------------------------- Surcharge d'opérateurs
 

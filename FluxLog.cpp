@@ -13,7 +13,6 @@
 //-------------------------------------------------------- Include système
 
 #include <iostream>
-using namespace std;
 
 //------------------------------------------------------ Include personnel
 
@@ -68,7 +67,7 @@ Ligne FluxLog::LireLigne()
     }
     Ligne ligneCourante(ip,logName,userName,date,cible,httpCode,size,referer,client);
     return ligneCourante;
-}
+} //---- Fin de LireLigne
 
 //-------------------------------------------- Constructeurs - destructeur
 FluxLog::FluxLog (string nomFichier, ios_base::openmode mode) : ifstream(nomFichier,mode)
@@ -78,7 +77,7 @@ FluxLog::FluxLog (string nomFichier, ios_base::openmode mode) : ifstream(nomFich
     cout << "Appel au constructeur de <FluxLog>" << endl;
 #endif
 
-} //----- Fin de Ligne
+} //----- Fin de FluxLog
 
 
 FluxLog::~FluxLog ( )
@@ -87,7 +86,7 @@ FluxLog::~FluxLog ( )
 #ifdef MAP
     cout << "Appel au destructeur de <FluxLog>" << endl;
 #endif
-} //----- Fin de ~Ligne
+} //----- Fin de ~FluxLog
 
 
 //------------------------------------------------------------------ PRIVE
