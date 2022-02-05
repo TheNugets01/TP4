@@ -1,0 +1,14 @@
+Pour utiliser notre application il faut compiler le programme en utilisant la commande make
+
+Ensuite il faut le lancer en utilisant la commande
+./analog [-t HEURE -e -g NOMFICHIER.dot] NOMFICHIERLOG.log
+
+Cette commande doit être suivi des différents paramètres Obligatoire ou facultatif
+
+Obligatoire :
+ le nom du fichier avec l'extension .log (extension log obligatoire)
+
+Facultatif :
+ -t HEURE : permet de specifier l'heure des logs que vous voulez analyser
+ -e : permet de retirer tous les fichiers d'image des logs
+ -g NOMFICHIER.dot : permet de generer un graph /!\ le .dot est obligatoire 
