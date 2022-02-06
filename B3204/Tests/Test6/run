@@ -1,1 +1,1 @@
-cat fichier.txt >sortie.txt && echo "essai" >sortie2.txt
+../../analog -t 11 -e -g graph.dot test.log

@@ -1,1 +1,1 @@
-echo "yop !"
+../../analog -t 24 test.log
