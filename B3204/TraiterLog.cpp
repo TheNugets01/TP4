@@ -66,7 +66,7 @@ Arguments TraiterArgs(int nbArg, char *listArg[])
                 mesArgs.g = true;
                 mesArgs.nomDot = listArg[++i];
 
-                if ( mesArgs.nomDot.compare( mesArgs.nomDot.length()- 4 ,4,".dot") != 0 ) // Oublie de specifier le fichier dot
+                if ( mesArgs.nomDot.length() < 4 || mesArgs.nomDot.compare( mesArgs.nomDot.length()- 4 ,4,".dot") != 0 ) // Oublie de specifier le fichier dot
                 {
                     cerr << "Erreur /!\\ Le fichier '.dot' est mal définie !" << endl;
                     cerr << " ---------Pensez à bien spécifiez le type '.dot' " << endl;
