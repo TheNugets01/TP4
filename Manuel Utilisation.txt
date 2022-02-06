@@ -10,5 +10,5 @@ Obligatoire :
 
 Facultatif :
  -t HEURE : permet de specifier l'heure des logs que vous voulez analyser
- -e : permet de retirer tous les fichiers d'image des logs
+ -e : permet de retirer tous les fichiers d'image, css et javascript des logs
  -g NOMFICHIER.dot : permet de generer un graph /!\ le .dot est obligatoire 

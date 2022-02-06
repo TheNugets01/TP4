@@ -6,7 +6,7 @@ MAP : EXTFLAGS += -DMAP
 MAP : analog
 
 analog : Ligne.o FluxLog.o TraiterLog.o main.o
-		g++ -o analog Ligne.o FluxLog.o TraiterLog.o main.o $(EXTFLAGS)
+		g++ -o analog FluxLog.o Ligne.o TraiterLog.o main.o $(EXTFLAGS)
 
 Ligne.cpp : Ligne.cpp
 		g++ -c -g $(EXTFLAGS) Ligne.cpp

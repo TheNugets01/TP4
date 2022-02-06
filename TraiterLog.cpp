@@ -40,14 +40,14 @@ Arguments TraiterArgs(int nbArg, char *listArg[])
     if( nbArg == 1 )
     // Traitement de l'oublie du nom du fichier log à traiter
     {
-        cerr << "l'appel à la fonction n'est pas bien formé" << endl;
+        cerr << "Erreur /!\\ l'appel à la fonction n'est pas bien formé" << endl;
         return mesArgs;
     }
 
     mesArgs.nomLog = listArg[nbArg - 1];
     if ( mesArgs.nomLog.length() <= 4 || mesArgs.nomLog.compare( mesArgs.nomLog.length()- 4 ,4,".log") != 0 )
     {
-        cerr << "Erreur ! Le fichier '.log' est mal définie ou mal positionné!" << endl;
+        cerr << "Erreur /!\\ Le fichier '.log' est mal définie ou mal positionné!" << endl;
         cerr << "----Pensez à bien spécifiez le type '.log' et d'écrire le nom de fichier à la fin" << endl;
         mesArgs.g = false;
         mesArgs.e = false;
@@ -68,7 +68,7 @@ Arguments TraiterArgs(int nbArg, char *listArg[])
 
                 if ( mesArgs.nomDot.compare( mesArgs.nomDot.length()- 4 ,4,".dot") != 0 ) // Oublie de specifier le fichier dot
                 {
-                    cerr << "Erreur ! Le fichier '.dot' est mal définie !" << endl;
+                    cerr << "Erreur /!\\ Le fichier '.dot' est mal définie !" << endl;
                     cerr << " ---------Pensez à bien spécifiez le type '.dot' " << endl;
                     mesArgs.g = false;
                     mesArgs.nomDot = "";
@@ -78,14 +78,14 @@ Arguments TraiterArgs(int nbArg, char *listArg[])
             {
                 mesArgs.e = true;
             }
-            else if ( listArg[i][1] == 't' && i+2 < nbArg ) // traitement du mode t
+            else if ( listArg[i][1] == 't' && i+2 < nbArg && stoi(listArg[i+1]) < 24 && stoi(listArg[i+1]) >= 0) // traitement du mode t
             {
                 mesArgs.t = true;
                 mesArgs.heure = stoi(listArg[++i]);
             }
             else
             {
-                cerr << "Erreur ! Un des modes n'est pas connu ou est mal défini !" << endl;
+                cerr << "Erreur /!\\ Un des modes n'est pas connu ou est mal défini !" << endl;
                 return mesArgs;
             }
         }
@@ -167,8 +167,8 @@ void Graph( umSumSI cptRefCib , string nomDot )
 
     string referer;
     string cible;
-    int nbLink;
-    int i;
+
+    unsigned int i;
     size_t found;
     bool inNodes;
 
@@ -309,10 +309,10 @@ void FillUM( FluxLog & src , Arguments & mesArgs , umSI & cptCible ,umSumSI & cp
     { // on parcourt chaque ligne du fichier jusqu'a la fin
         Ligne ligneCourante(src.LireLigne());
 
-        httpCode = ligneCourante.GetHttpCode();
-        cible = ligneCourante.GetCible();
-        referer = ligneCourante.GetReferer();
-        date = ligneCourante.GetDate();
+        httpCode = ligneCourante.httpCode;
+        cible = ligneCourante.cible;
+        referer = ligneCourante.referer;
+        date = ligneCourante.date;
         hLigne = stoi( date.erase(0,12).erase(2,12) );
 
         // -----Traitement du mode -t
@@ -332,7 +332,7 @@ void FillUM( FluxLog & src , Arguments & mesArgs , umSI & cptCible ,umSumSI & cp
         // -----Fin du traitement de -e
 
 
-        if( (httpCode == 200 || httpCode == 304) && chkTimes && extensionType)
+        if( (httpCode == 200 || httpCode == 304) && chkTimes && extensionType && (referer != "-"))
         // Check des httpCode et des conditions de mode
         {
             if(mesArgs.g)

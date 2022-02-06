@@ -15,8 +15,14 @@
 #include <string>
 using namespace std;
 
-//------------------------------------------------------------- Constantes
+#include <unordered_map>
 
+struct Arguments;
+class FluxLog;
+
+//------------------------------------------------------------- Constantes
+typedef unordered_map<string,int> umSI; // map simple
+typedef unordered_map<string , unordered_map<string,int>> umSumSI;
 //------------------------------------------------------------------ Types
 
 //------------------------------------------------------------------------
@@ -37,25 +43,7 @@ public:
 
 //--------------------------------------------------------------- Getteurs
 
-    int GetHttpCode()
-    {
-        return httpCode;
-    }
-
-    string GetReferer()
-    {
-        return referer;
-    }
-
-    string GetCible()
-    {
-        return cible;
-    }
-
-    string GetDate()
-    {
-        return date;
-    }
+    friend void FillUM( FluxLog & src , Arguments & mesArgs , umSI & cptCible ,umSumSI & cptRefCib);
 
 //-------------------------------------------- Constructeurs - destructeur
 
@@ -81,12 +69,12 @@ protected:
     string ip;
     string logName;
     string userName;
-    string client;
     string date;
     string cible;
-    string referer;
     int httpCode;
     int size;
+    string referer;
+    string client;
 
 };
 
